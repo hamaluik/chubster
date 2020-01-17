@@ -1,19 +1,28 @@
+import 'package:chubster/repositories/localdb/localdb_repository.dart';
+import 'package:chubster/screens/foods/foods_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/theme/bloc.dart';
+import 'screens/dashboard/dashboard_screen.dart';
 
 void main() {
   runApp(
-    MultiBlocProvider(
+    MultiRepositoryProvider(
       providers: [
-        BlocProvider<ThemeBloc>(
-          create: (BuildContext context) => ThemeBloc(),
-        )
+        RepositoryProvider<LocalDBRepository>(create: (BuildContext context) => LocalDBRepository.openSync())
       ],
-      child: BlocBuilder<ThemeBloc, ThemeState>(
-        builder: (context, state) => _ChubsterApp(),
-      ),
-    ),
+      child: 
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ThemeBloc>(
+              create: (BuildContext context) => ThemeBloc(),
+            )
+          ],
+          child: BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, state) => _ChubsterApp(),
+          ),
+        ),
+    )
   );
 }
 
@@ -51,23 +60,13 @@ class _ChubsterAppState extends State<_ChubsterApp>
     return MaterialApp(
       title: 'Chubster',
       theme: BlocProvider.of<ThemeBloc>(context).state.theme,
-      home: Scaffold(
-          appBar: AppBar(
-            title: Text("Chubster"),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.plus_one),
-            onPressed: () => BlocProvider.of<ThemeBloc>(context).add(
-                BrightnessChanged(
-                    brightness:
-                        BlocProvider.of<ThemeBloc>(context).state.brightness ==
-                                Brightness.dark
-                            ? Brightness.light
-                            : Brightness.dark)),
-          ),
-          body: Center(
-            child: Text("Hello world"),
-          )),
+      routes: {
+        '/': (context) => DashboardScreen(),
+        '/add': (context) => DashboardScreen(),
+        '/foods': (context) => FoodsScreen(),
+        '/settings': (context) => DashboardScreen(),
+      },
+      initialRoute: '/',
     );
   }
 }
