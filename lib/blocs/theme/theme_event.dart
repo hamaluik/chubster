@@ -8,7 +8,8 @@ abstract class ThemeEvent extends Equatable {
 class BrightnessChanged extends ThemeEvent {
   final Brightness brightness;
 
-  const BrightnessChanged({@required this.brightness}) : assert(brightness != null);
+  const BrightnessChanged({@required this.brightness})
+      : assert(brightness != null);
 
   @override
   List<Object> get props => [brightness];

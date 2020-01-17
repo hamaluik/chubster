@@ -30,8 +30,6 @@ class _ChubsterAppState extends State<_ChubsterApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    BlocProvider.of<ThemeBloc>(context).add(BrightnessChanged(
-        brightness: WidgetsBinding.instance.window.platformBrightness));
   }
 
   @override
@@ -61,9 +59,11 @@ class _ChubsterAppState extends State<_ChubsterApp>
             child: Icon(Icons.plus_one),
             onPressed: () => BlocProvider.of<ThemeBloc>(context).add(
                 BrightnessChanged(
-                    brightness: BlocProvider.of<ThemeBloc>(context).state.brightness == Brightness.dark
-                        ? Brightness.light
-                        : Brightness.dark)),
+                    brightness:
+                        BlocProvider.of<ThemeBloc>(context).state.brightness ==
+                                Brightness.dark
+                            ? Brightness.light
+                            : Brightness.dark)),
           ),
           body: Center(
             child: Text("Hello world"),

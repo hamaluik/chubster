@@ -5,7 +5,8 @@ class ThemeState extends Equatable {
   final Brightness brightness;
   final ThemeData theme;
 
-  const ThemeState({@required this.brightness, @required this.theme}) : assert(theme != null);
+  const ThemeState({@required this.brightness, @required this.theme})
+      : assert(theme != null);
 
   @override
   List<Object> get props => [brightness];
