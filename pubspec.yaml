@@ -14,10 +14,22 @@ dependencies:
   fancy_bottom_navigation: ^0.3.2
   font_awesome_flutter: ^8.5.0
   sqflite: ^1.2.0
+  just_debounce_it: ^3.0.0+2
+  loading_indicator: ^1.0.0
+  settings_ui: ^0.1.1
+  shared_preferences: ^0.5.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.4
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "working_logo.png"
+  adaptive_icon_background: "#4caf50"
+  adaptive_icon_foreground: "working_logo_android_fg.png"
 
 flutter:
   uses-material-design: true

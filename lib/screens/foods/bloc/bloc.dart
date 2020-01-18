@@ -1,3 +1,3 @@
-export 'foodsscreen_bloc.dart';
-export 'foodsscreen_event.dart';
-export 'foodsscreen_state.dart';
+export 'foods_bloc.dart';
+export 'foods_event.dart';
+export 'foods_state.dart';

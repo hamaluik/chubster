@@ -66,3 +66,7 @@ release schedule.
 
 The _Chubster_ app is developed in [Flutter](https://flutter.dev/), using the
 [BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc/) pattern.
+
+## Licenses
+
+* Logo is `Pig by Hey Rabbit from the Noun Project`: https://thenounproject.com/search/?q=pig&i=2669846

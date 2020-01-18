@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chubster/models/food.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
@@ -11,7 +10,8 @@ class LocalDBRepository {
 
   Future<List<Food>> searchForFoodByName(String name) async {
     List<Map> results = await _db.rawQuery('select * from foods where name like ?', ['%$name%']);
-    return results.map((food) => Food.fromJson(food));
+    List<Food> foods = results.map((food) => Food.fromJson(food)).toList();
+    return foods;
   }
 
   Future<int> createFood(Food food) async {
@@ -47,35 +47,16 @@ class LocalDBRepository {
         iron real default null,
         vitamin_a real default null,
         vitamin_c real default null,
-        caffeine real default null,
+        caffeine real default null
       )
     ''');
 
     await db.execute('''
       create index food_name_index on foods(name)
     ''');
-  }
-
-  static LocalDBRepository openSync() {
-    LocalDBRepository repo;
-    LocalDBRepository.open()
-      .then((r) => repo = r);
-    return repo;
-  }
-
-  static Future<LocalDBRepository> open() async {
-    // get a path to the database file
-    var databasesPath = await getDatabasesPath();
-    var path = p.join(databasesPath, 'chubster.local.db');
-    await Directory(databasesPath).create(recursive: true);
-
-    // open the database
-    Database db = await openDatabase(path,
-        onConfigure: _onConfigure, onCreate: _onCreate);
-    LocalDBRepository repo = LocalDBRepository(db);
 
     // todo: remove this testing code
-    await repo.createFood(Food(
+    Food chicken = Food(
       name: "Chicken Breast",
       servingSize: 4.2,
       servingSizeUnits: "oz",
@@ -97,7 +78,20 @@ class LocalDBRepository {
       vitaminA: 17,
       vitaminC: 0,
       caffeine: 0,
-    ));
+    );
+    await db.rawInsert("insert into foods(name, serving_size, serving_size_units, calories, fat_total, fat_saturated, fat_polyunsaturated, fat_monounsaturated, cholesterol, sodium, carbohydrates, fiber, sugars, protein, calcium, potassium, alcohol, iron, vitamin_a, vitamin_c, caffeine) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", chicken.props);
+  }
+
+  static Future<LocalDBRepository> open() async {
+    // get a path to the database file
+    var databasesPath = await getDatabasesPath();
+    var path = p.join(databasesPath, 'chubster.local.db');
+    await Directory(databasesPath).create(recursive: true);
+
+    // open the database
+    Database db = await openDatabase(path,
+        onConfigure: _onConfigure, onCreate: _onCreate, version: 1);
+    LocalDBRepository repo = LocalDBRepository(db);
 
     return repo;
   }
