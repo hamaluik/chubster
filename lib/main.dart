@@ -1,12 +1,8 @@
 import 'package:chubster/log_bloc_delegate.dart';
 import 'package:chubster/repositories/localdb_repository.dart';
 import 'package:chubster/repositories/settings_repository.dart';
-import 'package:chubster/screens/foods/bloc/foods_bloc.dart';
 import 'package:chubster/screens/foods/foods_screen.dart';
-import 'package:chubster/screens/settings/bloc/bloc.dart';
 import 'package:chubster/screens/settings/settings_screen.dart';
-import 'package:chubster/themes.dart';
-import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -45,7 +41,7 @@ class _ChubsterApp extends StatefulWidget {
   State<StatefulWidget> createState() => _ChubsterAppState();
 }
 
-enum Screen { dashboard, foods, settings }
+enum Screen { dashboard, log, foods, stats, settings }
 
 class _ChubsterAppState extends State<_ChubsterApp>
     with WidgetsBindingObserver {
@@ -81,9 +77,17 @@ class _ChubsterAppState extends State<_ChubsterApp>
         title = Text("Dashboard");
         body = DashboardScreen();
         break;
+      case Screen.log:
+        title = Text("Log");
+        body = Container();
+        break;
       case Screen.foods:
         title = Text("Foods");
         body = FoodsScreen();
+        break;
+      case Screen.stats:
+        title = Text("Stats");
+        body = Container();
         break;
       case Screen.settings:
         title = Text("Settings");
@@ -99,21 +103,20 @@ class _ChubsterAppState extends State<_ChubsterApp>
       child: MaterialApp(
         title: 'Chubster',
         theme: BlocProvider.of<ThemeBloc>(context).state.theme,
-        darkTheme: darkTheme,
         home: Scaffold(
-          appBar: AppBar(
-            title: title,
-          ),
           body: body,
-          bottomNavigationBar: FancyBottomNavigation(
-            initialSelection: _currentScreen.index,
-            tabs: [
-              TabData(iconData: FontAwesomeIcons.home, title: "Dasboard"),
-              TabData(iconData: FontAwesomeIcons.carrot, title: "Foods"),
-              TabData(iconData: FontAwesomeIcons.cogs, title: "Settings")
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentScreen.index,
+            type: BottomNavigationBarType.shifting,
+            items: [
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home), title: Text("Dashboard"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.cookieBite), title: Text("Log"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.carrot), title: Text("Foods"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.chartLine), title: Text("Stats"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userAstronaut), title: Text("Profile"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
             ],
-            onTabChangedListener: (position) => setState(() {
-              _currentScreen = Screen.values[position];
+            onTap: (index) => setState(() {
+              _currentScreen = Screen.values[index];
             })
           ),
         ),

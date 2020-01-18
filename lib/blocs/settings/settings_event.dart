@@ -1,4 +1,4 @@
-import 'package:chubster/screens/settings/bloc/settings_state.dart';
+import 'package:chubster/models/units.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class SettingsEvent extends Equatable {

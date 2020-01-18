@@ -1,7 +1,5 @@
+import 'package:chubster/models/units.dart';
 import 'package:equatable/equatable.dart';
-
-enum BodyWeightUnits { lbs, kgs, stone }
-enum EnergyUnits { KCal, KJ }
 
 class SettingsState extends Equatable {
   final BodyWeightUnits bodyWeightUnits;

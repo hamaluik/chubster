@@ -1,4 +1,3 @@
-import 'package:chubster/components/navbar.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {

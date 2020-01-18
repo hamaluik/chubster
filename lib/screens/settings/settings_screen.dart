@@ -1,9 +1,9 @@
-import 'package:chubster/components/navbar.dart';
+import 'package:chubster/blocs/settings/bloc.dart';
+import 'package:chubster/models/units.dart';
 import 'package:chubster/repositories/settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'bloc/bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key key}) : super(key: key);
@@ -133,90 +133,6 @@ class SettingsScreen extends StatelessWidget {
                     )),
               ],
             );
-
-            /*return SettingsList(
-              sections: [
-                SettingsSection(
-                  title: 'Default Units',
-                  tiles: [
-                    SettingsTile(
-                      title: 'Body Weight',
-                      subtitle: bodyWeightUnits,
-                      leading: Icon(FontAwesomeIcons.weight),
-                      onTap: () => showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  RadioListTile<BodyWeightUnits>(
-                                    title: const Text('lbs'),
-                                    activeColor: Theme.of(context).accentColor,
-                                    value: BodyWeightUnits.lbs,
-                                    groupValue: state.bodyWeightUnits,
-                                    onChanged: (BodyWeightUnits value) {
-                                      settings.add(ChangeWeightUnits(value));
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RadioListTile<BodyWeightUnits>(
-                                    title: const Text('kgs'),
-                                    activeColor: Theme.of(context).accentColor,
-                                    value: BodyWeightUnits.kgs,
-                                    groupValue: state.bodyWeightUnits,
-                                    onChanged: (BodyWeightUnits value) {
-                                      settings.add(ChangeWeightUnits(value));
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RadioListTile<BodyWeightUnits>(
-                                    title: const Text('stone'),
-                                    activeColor: Theme.of(context).accentColor,
-                                    value: BodyWeightUnits.stone,
-                                    groupValue: state.bodyWeightUnits,
-                                    onChanged: (BodyWeightUnits value) {
-                                      settings.add(ChangeWeightUnits(value));
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              )),
-                    ),
-                    SettingsTile(
-                      title: 'Food Energy',
-                      subtitle: energyUnits,
-                      leading: Icon(FontAwesomeIcons.bolt),
-                      onTap: () => showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  RadioListTile<EnergyUnits>(
-                                    title: const Text('KCal'),
-                                    activeColor: Theme.of(context).accentColor,
-                                    value: EnergyUnits.KCal,
-                                    groupValue: state.energyUnits,
-                                    onChanged: (EnergyUnits value) {
-                                      settings.add(ChangeEnergyUnits(value));
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RadioListTile<EnergyUnits>(
-                                    title: const Text('KJ'),
-                                    activeColor: Theme.of(context).accentColor,
-                                    value: EnergyUnits.KJ,
-                                    groupValue: state.energyUnits,
-                                    onChanged: (EnergyUnits value) {
-                                      settings.add(ChangeEnergyUnits(value));
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              )),
-                    ),
-                  ],
-                ),
-              ],
-            );*/
           },
         ));
   }
