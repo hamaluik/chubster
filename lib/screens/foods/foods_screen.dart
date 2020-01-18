@@ -10,29 +10,22 @@ import 'bloc/bloc.dart';
 class FoodsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final LocalDBRepository localDB = RepositoryProvider.of<LocalDBRepository>(context);
+    final LocalDBRepository localDB =
+        RepositoryProvider.of<LocalDBRepository>(context);
     assert(localDB != null);
 
     return BlocProvider<FoodsBloc>(
-      create: (_) => FoodsBloc(localDB),
-      child: Scaffold(
-        appBar: AppBar(title: Text('Foods')),
-        body: Container(
+        create: (_) => FoodsBloc(localDB),
+        child: Container(
             child: Column(
-            children: <Widget>[
-                Padding(
-                padding: EdgeInsets.all(16.0),
-                child: _SearchBar(),
-                ),
-                _SearchResults(),
-            ],
-            )
-        ),
-        bottomNavigationBar: NavBar(
-          screen: Screen.foods,
-        ),
-      )
-    );
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: _SearchBar(),
+            ),
+            _SearchResults(),
+          ],
+        )));
   }
 }
 
@@ -61,12 +54,12 @@ class _SearchBarState extends State<_SearchBar> {
     final FoodsBloc foodsBloc = BlocProvider.of<FoodsBloc>(context);
 
     return TextField(
-      decoration: InputDecoration(
-        icon: Icon(FontAwesomeIcons.search)
-      ),
+      decoration: InputDecoration(icon: Icon(FontAwesomeIcons.search)),
       controller: _textController,
-      onChanged: (searchTerm) => Debounce.milliseconds(100, _updateSearch, [foodsBloc, searchTerm]),
-      onSubmitted: (searchTerm) => Debounce.runAndClear(_updateSearch, [foodsBloc, searchTerm]),
+      onChanged: (searchTerm) =>
+          Debounce.milliseconds(100, _updateSearch, [foodsBloc, searchTerm]),
+      onSubmitted: (searchTerm) =>
+          Debounce.runAndClear(_updateSearch, [foodsBloc, searchTerm]),
     );
   }
 }
@@ -78,21 +71,17 @@ class _SearchResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FoodsBloc, FoodsState>(
       builder: (context, state) {
-        if(state is EmptyFoodsState) {
+        if (state is EmptyFoodsState) {
+          return Center(child: Text("Search for foods by name"));
+        } else if (state is SearchingFoodsState) {
           return Center(
-            child: Text("Search for foods by name")
-          );
-        }
-        else if(state is SearchingFoodsState) {
-          return Center(
-            child: SizedBox(
-              width: 30.0,
-              height: 30.0,
-              child: LoadingIndicator(indicatorType: Indicator.pacman,)
-            )
-          );
-        }
-        else if(state is SearchResultsFoodsState) {
+              child: SizedBox(
+                  width: 30.0,
+                  height: 30.0,
+                  child: LoadingIndicator(
+                    indicatorType: Indicator.pacman,
+                  )));
+        } else if (state is SearchResultsFoodsState) {
           return Expanded(
             child: ListView(
               padding: EdgeInsets.all(10.0),
@@ -101,13 +90,11 @@ class _SearchResults extends StatelessWidget {
               }).toList(),
             ),
           );
-        }
-        else if(state is SearchingFoodsError) {
+        } else if (state is SearchingFoodsError) {
           return Center(
-            child: Text("Error!", style: TextStyle(color: Theme.of(context).errorColor))
-          );
-        }
-        else {
+              child: Text("Error!",
+                  style: TextStyle(color: Theme.of(context).errorColor)));
+        } else {
           return SizedBox(
             child: Text(state.toString()),
           );

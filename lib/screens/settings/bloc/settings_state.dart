@@ -12,5 +12,5 @@ class SettingsState extends Equatable {
   : this(bodyWeightUnits: bodyWeightUnits ?? settings.bodyWeightUnits, energyUnits: energyUnits ?? settings.energyUnits);
 
   @override
-  List<Object> get props => [bodyWeightUnits];
+  List<Object> get props => [bodyWeightUnits, energyUnits];
 }
