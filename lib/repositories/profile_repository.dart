@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:chubster/models/metric.dart';
 import 'package:chubster/models/sex.dart';
+import 'package:chubster/models/units.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
@@ -11,18 +11,14 @@ class ProfileRepository {
 
   ProfileRepository(this._db, this._prefs);
 
-  void recordMetric(Metric metric) async {
-    await _db.rawInsert(
-        "insert into metrics(metric, value, units, timestamp) values(?, ?, ?, datetime('now'))",
-        [metric.name, metric.value, metric.units.unitsStr]);
+  LengthUnits getHeight() {
+    double height = _prefs.getDouble("height");
+    if(height == null) return null;
+    return Meters(height);
   }
 
-  double getHeight() {
-    return _prefs.getDouble("height") ?? 0.0;
-  }
-
-  void setHeight(double height) async {
-    await _prefs.setDouble("height", height);
+  void setHeight(LengthUnits height) async {
+    await _prefs.setDouble("height", height.toMeters().value);
   }
 
   Sex getSex() {
@@ -42,14 +38,24 @@ class ProfileRepository {
     await db.execute("PRAGMA foreign_keys = ON");
   }
 
+  Future<KiloGrams> getCurrentWeight() async {
+    var results = await _db.rawQuery("select weight from weights order by timestamp desc limit 1");
+    if(results.length > 0) {
+      double weight = results[0]["weight"];
+      return KiloGrams(weight);
+    }
+    return null;
+  }
+
+  void recordWeight(WeightUnits weight) async {
+    await _db.rawInsert("insert into weights(weight) values(?)", [weight.toKiloGrams().value]);
+  }
+
   static void _onCreate(Database db, int version) async {
     await db.execute('''
-      create table metrics(
-        id integer not null primary key autoincrement,
-        metric text not null,
-        units text not null,
-        value real not null,
-        timestamp integer not null
+      create table weights(
+        weight real not null,
+        timestamp integer not null default current_timestamp
       )
     ''');
   }

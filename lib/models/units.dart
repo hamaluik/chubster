@@ -1,8 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-enum BodyWeightUnits { lbs, kgs, stone }
-enum EnergyUnits { KCal, KJ }
-
 abstract class Units extends Equatable {
   String get unitsStr;
 }
@@ -15,6 +12,12 @@ abstract class WeightUnits extends Units {
   double get _scale => 1.0;
   double get value => _grams * _scale;
   @override String get unitsStr => "g";
+
+  Grams toGrams() => this;
+  KiloGrams toKiloGrams() => this;
+  MilliGrams toMilliGrams() => this;
+  Oz toOz() => this;
+  Lbs toLbs() => this;
 }
 
 class Grams extends WeightUnits {
@@ -55,6 +58,11 @@ abstract class LengthUnits extends Units {
   double get _scale => 1.0;
   double get value => _meters * _scale;
   @override String get unitsStr => "m";
+
+  Meters toMeters() => Meters(this._meters);
+  CentiMeters toCentiMeters() => CentiMeters(this._meters * 100.0);
+  Feet toFeet() => Feet(this._meters * 3.28084);
+  Inches toInches() => Inches(this._meters * 39.37008);
 }
 
 class Meters extends LengthUnits {

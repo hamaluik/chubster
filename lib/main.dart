@@ -1,10 +1,11 @@
+import 'package:chubster/blocs/profile/bloc.dart';
 import 'package:chubster/blocs/settings/settings_bloc.dart';
 import 'package:chubster/blocs/settings/settings_event.dart';
 import 'package:chubster/repositories/localdb_repository.dart';
 import 'package:chubster/repositories/profile_repository.dart';
 import 'package:chubster/repositories/settings_repository.dart';
 import 'package:chubster/screens/foods/foods_screen.dart';
-import 'package:chubster/screens/settings/settings_screen.dart';
+import 'package:chubster/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,6 +19,10 @@ void main() async {
   final SettingsRepository settings = await SettingsRepository.load();
   final ProfileRepository profile = await ProfileRepository.open();
 
+  assert(localDB != null);
+  assert(settings != null);
+  assert(profile != null);
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<ThemeBloc>(
@@ -26,8 +31,8 @@ void main() async {
       BlocProvider<SettingsBloc>(
         create: (_) => SettingsBloc(settings),
       ),
-      BlocProvider<SettingsBloc>(
-        create: (_) => SettingsBloc(settings),
+      BlocProvider<ProfileBloc>(
+        create: (_) => ProfileBloc(profile),
       ),
     ],
     child: BlocBuilder<ThemeBloc, ThemeState>(
@@ -53,7 +58,7 @@ class _ChubsterApp extends StatefulWidget {
   State<StatefulWidget> createState() => _ChubsterAppState();
 }
 
-enum Screen { dashboard, stats, log, foods, settings }
+enum Screen { dashboard, stats, log, foods, profile }
 
 class _ChubsterAppState extends State<_ChubsterApp>
     with WidgetsBindingObserver {
@@ -65,6 +70,7 @@ class _ChubsterAppState extends State<_ChubsterApp>
     WidgetsBinding.instance.addObserver(this);
     _currentScreen = Screen.dashboard;
     BlocProvider.of<SettingsBloc>(context).add(LoadSettingsFromRepository());
+    BlocProvider.of<ProfileBloc>(context).add(LoadProfileFromRepository());
   }
 
   @override
@@ -83,28 +89,22 @@ class _ChubsterAppState extends State<_ChubsterApp>
 
   @override
   Widget build(BuildContext context) {
-    Widget title;
     Widget body;
     switch(_currentScreen) {
       case Screen.dashboard:
-        title = Text("Dashboard");
         body = DashboardScreen();
         break;
       case Screen.stats:
-        title = Text("Stats");
         body = Container();
         break;
       case Screen.log:
-        title = Text("Log");
         body = Container();
         break;
       case Screen.foods:
-        title = Text("Foods");
         body = FoodsScreen();
         break;
-      case Screen.settings:
-        title = Text("Settings");
-        body = SettingsScreen();
+      case Screen.profile:
+        body = ProfileScreen();
         break;
     }
 
@@ -112,12 +112,16 @@ class _ChubsterAppState extends State<_ChubsterApp>
       providers: [
         RepositoryProvider<LocalDBRepository>.value(value: widget.localDB),
         RepositoryProvider<SettingsRepository>.value(value: widget.settings),
+        RepositoryProvider<ProfileRepository>.value(value: widget.profile),
       ],
       child: MaterialApp(
         title: 'Chubster',
         theme: BlocProvider.of<ThemeBloc>(context).state.theme,
         home: Scaffold(
-          body: body,
+          body: Padding(
+            padding: EdgeInsets.only(top: 4.0),
+            child: body,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentScreen.index,
             type: BottomNavigationBarType.shifting,
