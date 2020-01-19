@@ -35,6 +35,7 @@ class LocalDBRepository {
         fat_saturated real default null,
         fat_polyunsaturated real default null,
         fat_monounsaturated real default null,
+        fat_transaturated real default null,
         cholesterol real default null,
         sodium real default null,
         carbohydrates real default null,
@@ -65,6 +66,7 @@ class LocalDBRepository {
       fatSaturated: 0.9,
       fatPolyunsaturated: 0.7,
       fatMonounsaturated: 1.1,
+      fatTransaturated: 0.0,
       cholesterol: 73,
       sodium: 64,
       carbohydrates: 0,
@@ -79,7 +81,7 @@ class LocalDBRepository {
       vitaminC: 0,
       caffeine: 0,
     );
-    await db.rawInsert("insert into foods(name, serving_size, serving_size_units, calories, fat_total, fat_saturated, fat_polyunsaturated, fat_monounsaturated, cholesterol, sodium, carbohydrates, fiber, sugars, protein, calcium, potassium, alcohol, iron, vitamin_a, vitamin_c, caffeine) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", chicken.props);
+    await db.rawInsert("insert into foods(name, serving_size, serving_size_units, calories, fat_total, fat_saturated, fat_polyunsaturated, fat_monounsaturated, fat_transaturated, cholesterol, sodium, carbohydrates, fiber, sugars, protein, calcium, potassium, alcohol, iron, vitamin_a, vitamin_c, caffeine) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", chicken.props);
   }
 
   static Future<LocalDBRepository> open() async {

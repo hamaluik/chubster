@@ -1,3 +1,5 @@
+import 'package:chubster/blocs/settings/settings_bloc.dart';
+import 'package:chubster/blocs/settings/settings_event.dart';
 import 'package:chubster/log_bloc_delegate.dart';
 import 'package:chubster/repositories/localdb_repository.dart';
 import 'package:chubster/repositories/settings_repository.dart';
@@ -13,13 +15,16 @@ void main() async {
   BlocSupervisor.delegate = LogBlocDelegate();
   WidgetsFlutterBinding.ensureInitialized();
   final LocalDBRepository localDB = await LocalDBRepository.open();
-  final SettingsRepository settings = SettingsRepository();
+  final SettingsRepository settings = await SettingsRepository.load();
 
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<ThemeBloc>(
-        create: (BuildContext context) => ThemeBloc(),
-      )
+        create: (_) => ThemeBloc(),
+      ),
+      BlocProvider<SettingsBloc>(
+        create: (_) => SettingsBloc(settings),
+      ),
     ],
     child: BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) =>
@@ -41,7 +46,7 @@ class _ChubsterApp extends StatefulWidget {
   State<StatefulWidget> createState() => _ChubsterAppState();
 }
 
-enum Screen { dashboard, log, foods, stats, settings }
+enum Screen { dashboard, stats, log, foods, settings }
 
 class _ChubsterAppState extends State<_ChubsterApp>
     with WidgetsBindingObserver {
@@ -52,6 +57,7 @@ class _ChubsterAppState extends State<_ChubsterApp>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _currentScreen = Screen.dashboard;
+    BlocProvider.of<SettingsBloc>(context).add(LoadSettingsFromRepository());
   }
 
   @override
@@ -77,6 +83,10 @@ class _ChubsterAppState extends State<_ChubsterApp>
         title = Text("Dashboard");
         body = DashboardScreen();
         break;
+      case Screen.stats:
+        title = Text("Stats");
+        body = Container();
+        break;
       case Screen.log:
         title = Text("Log");
         body = Container();
@@ -84,10 +94,6 @@ class _ChubsterAppState extends State<_ChubsterApp>
       case Screen.foods:
         title = Text("Foods");
         body = FoodsScreen();
-        break;
-      case Screen.stats:
-        title = Text("Stats");
-        body = Container();
         break;
       case Screen.settings:
         title = Text("Settings");
@@ -110,9 +116,9 @@ class _ChubsterAppState extends State<_ChubsterApp>
             type: BottomNavigationBarType.shifting,
             items: [
               BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home), title: Text("Dashboard"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.chartLine), title: Text("Stats"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
               BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.cookieBite), title: Text("Log"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
               BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.carrot), title: Text("Foods"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.chartLine), title: Text("Stats"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
               BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userAstronaut), title: Text("Profile"), backgroundColor: BlocProvider.of<ThemeBloc>(context).state.theme.accentColor),
             ],
             onTap: (index) => setState(() {

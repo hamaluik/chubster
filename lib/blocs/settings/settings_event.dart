@@ -5,6 +5,10 @@ abstract class SettingsEvent extends Equatable {
   const SettingsEvent();
 }
 
+class LoadSettingsFromRepository extends SettingsEvent {
+  @override List<Object> get props => [];
+}
+
 class ChangeWeightUnits extends SettingsEvent {
   final BodyWeightUnits newUnits;
   ChangeWeightUnits(this.newUnits);

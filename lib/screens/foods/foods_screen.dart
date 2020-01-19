@@ -1,4 +1,5 @@
 import 'package:chubster/repositories/localdb_repository.dart';
+import 'package:chubster/screens/foods/food_details/food_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -85,7 +86,12 @@ class _SearchResults extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.all(10.0),
               children: state.foods.map((food) {
-                return ListTile(title: Text(food.name));
+                return ListTile(
+                  title: Text(food.name),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => FoodDetailsScreen(food: food,),
+                  )),
+                );
               }).toList(),
             ),
           );

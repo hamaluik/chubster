@@ -9,6 +9,7 @@ class Food extends Equatable {
   final double fatSaturated;
   final double fatPolyunsaturated;
   final double fatMonounsaturated;
+  final double fatTransaturated;
   final double cholesterol;
   final double sodium;
   final double carbohydrates;
@@ -32,6 +33,7 @@ class Food extends Equatable {
     this.fatSaturated,
     this.fatPolyunsaturated,
     this.fatMonounsaturated,
+    this.fatTransaturated,
     this.cholesterol,
     this.sodium,
     this.carbohydrates,
@@ -56,6 +58,7 @@ class Food extends Equatable {
         fatSaturated = json['fat_saturated'],
         fatPolyunsaturated = json['fat_polyunsaturated'],
         fatMonounsaturated = json['fat_monounsaturated'],
+        fatTransaturated = json['fat_transaturated'],
         cholesterol = json['cholesterol'],
         sodium = json['sodium'],
         carbohydrates = json['carbohydrates'],
@@ -80,6 +83,7 @@ class Food extends Equatable {
         fatSaturated,
         fatPolyunsaturated,
         fatMonounsaturated,
+        fatTransaturated,
         cholesterol,
         sodium,
         carbohydrates,
