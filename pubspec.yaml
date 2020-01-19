@@ -18,6 +18,7 @@ dependencies:
   loading_indicator: ^1.0.0
   shared_preferences: ^0.5.6
   flutter_scale: ^0.1.2
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

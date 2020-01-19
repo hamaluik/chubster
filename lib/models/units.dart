@@ -13,11 +13,11 @@ abstract class WeightUnits extends Units {
   double get value => _grams * _scale;
   @override String get unitsStr => "g";
 
-  Grams toGrams() => this;
-  KiloGrams toKiloGrams() => this;
-  MilliGrams toMilliGrams() => this;
-  Oz toOz() => this;
-  Lbs toLbs() => this;
+  Grams toGrams() => Grams(this._grams);
+  KiloGrams toKiloGrams() => KiloGrams(this._grams * 0.001);
+  MilliGrams toMilliGrams() => MilliGrams(this._grams * 1000.0);
+  Oz toOz() => Oz(this._grams * 0.03527396);
+  Lbs toLbs() => Lbs(this._grams * 0.002204623);
 }
 
 class Grams extends WeightUnits {

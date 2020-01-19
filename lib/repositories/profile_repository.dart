@@ -11,6 +11,19 @@ class ProfileRepository {
 
   ProfileRepository(this._db, this._prefs);
 
+  DateTime getBirthday() {
+    int ts = _prefs.getInt("birthday");
+    if(ts == null) {
+      return DateTime.now().subtract(Duration(days: (365.25 * 30.0).ceil()));
+    }
+    return DateTime.fromMillisecondsSinceEpoch(ts);
+  }
+
+  void setBirthday(DateTime birthday) async {
+    int ts = birthday.millisecondsSinceEpoch;
+    await _prefs.setInt("birthday", ts);
+  }
+
   LengthUnits getHeight() {
     double height = _prefs.getDouble("height");
     if(height == null) return null;

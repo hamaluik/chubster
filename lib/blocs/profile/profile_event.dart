@@ -10,6 +10,13 @@ class LoadProfileFromRepository extends ProfileEvent {
   @override List<Object> get props => [];
 }
 
+class SetBirthday extends ProfileEvent {
+  final DateTime newBirthday;
+  SetBirthday(this.newBirthday);
+
+  @override List<Object> get props => [newBirthday];
+}
+
 class ChangeSex extends ProfileEvent {
   final Sex newSex;
   ChangeSex(this.newSex);
@@ -22,4 +29,11 @@ class SetHeight extends ProfileEvent {
   SetHeight(this.newHeight);
 
   @override List<Object> get props => [newHeight];
+}
+
+class SetWeight extends ProfileEvent {
+  final WeightUnits newWeight;
+  SetWeight(this.newWeight);
+
+  @override List<Object> get props => [newWeight];
 }

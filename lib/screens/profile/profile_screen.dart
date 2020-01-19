@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_scale/flutter_scale.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:just_debounce_it/just_debounce_it.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -46,8 +47,26 @@ class ProfileScreen extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                 child: ListTile(
+                  title: Text("Birthday"),
+                  subtitle: Text(new DateFormat.yMMMd().format(profile.birthday)),
+                  trailing: Icon(FontAwesomeIcons.chevronRight),
+                  leading: Icon(FontAwesomeIcons.birthdayCake),
+                  onTap: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: profile.birthday,
+                      firstDate: DateTime.now().subtract(Duration(days: (365.25 * 80).floor())),
+                      lastDate: DateTime(DateTime.now().year),
+                    )
+                    .then((DateTime newBirthday) => profileBloc.add(SetBirthday(newBirthday)));
+                  },
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                child: ListTile(
                   title: Text("Sex"),
-                  trailing: Text(profile.sex.stringify),
+                  subtitle: Text(profile.sex.stringify),
+                  trailing: Icon(FontAwesomeIcons.chevronRight),
                   leading: Icon(sexIcon),
                   onTap: () => showModalBottomSheet(
                       context: context,
@@ -88,14 +107,47 @@ class ProfileScreen extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                 child: ListTile(
                   title: Text("Height"),
-                  trailing: profile.height != null
+                  subtitle: profile.height != null
                       ? Text(profile.height.value.toStringAsFixed(2) +
                           " " +
                           profile.height.unitsStr)
                       : Text("—"),
+                  trailing: Icon(FontAwesomeIcons.chevronRight),
                   leading: Icon(FontAwesomeIcons.ruler),
                   onTap: () => showModalBottomSheet(
                       context: context, builder: (context) => HeightsSheet()),
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                child: ListTile(
+                  title: Text("Weight"),
+                  subtitle: profile.weight != null
+                      ? Text(profile.weight.value.toStringAsFixed(1) +
+                          " " +
+                          profile.weight.unitsStr)
+                      : Text("—"),
+                  trailing: Icon(FontAwesomeIcons.chevronRight),
+                  leading: Icon(FontAwesomeIcons.weight),
+                  onTap: () => showModalBottomSheet(
+                      context: context, builder: (context) => WeightSheet()),
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                child: ListTile(
+                  title: Text("BMI"),
+                  subtitle: profile.bmi != null
+                      ? Text(profile.bmi.toStringAsFixed(1))
+                      : Text("—"),
+                  leading: Icon(FontAwesomeIcons.user),
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                child: ListTile(
+                  title: Text("Body Fat"),
+                  subtitle: profile.bodyFatPercent != null
+                      ? Text("Estimated " + profile.bodyFatPercent.toStringAsFixed(0) + "%")
+                      : Text("—"),
+                  leading: Icon(FontAwesomeIcons.percentage),
                 )),
           ],
         );
@@ -126,12 +178,6 @@ class _HeightsSheetState extends State<HeightsSheet> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    
-    super.dispose();
-  }
-
   void _setHeight() {
     Meters newHeight = cm.toMeters();
     BlocProvider.of<ProfileBloc>(context).add(SetHeight(newHeight));
@@ -139,7 +185,6 @@ class _HeightsSheetState extends State<HeightsSheet> {
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: <Widget>[
         Expanded(
@@ -167,12 +212,6 @@ class _HeightsSheetState extends State<HeightsSheet> {
           scaleColor: Theme.of(context).accentColor,
           lineColor: Colors.white,
           scaleController: _scaleController,
-          pointer: Container(
-            height: 3,
-            width: 90,
-            decoration:
-                BoxDecoration(color: Colors.redAccent.withOpacity(0.7)),
-          ),
           onChanged: (int scalePoints) {
             int inchOffest = scalePoints ~/ 20;
             Feet newHeightFeet = Feet(feet + inches.toDouble() / 12.0);
@@ -185,6 +224,66 @@ class _HeightsSheetState extends State<HeightsSheet> {
             _setHeight();
           },
         )
+      ],
+    );
+  }
+}
+
+class WeightSheet extends StatefulWidget {
+  WeightSheet({Key key}) : super(key: key);
+
+  @override
+  _WeightSheetState createState() => _WeightSheetState();
+}
+
+class _WeightSheetState extends State<WeightSheet> {
+  ScrollController _scaleController;
+  Lbs lbs;
+
+  @override
+  void initState() {
+    WeightUnits startWeight = BlocProvider.of<ProfileBloc>(context).state.weight;
+    if(startWeight == null) startWeight = Lbs(200);
+
+    _scaleController = ScrollController(initialScrollOffset: (200 * startWeight.toLbs().value).toDouble());
+    lbs = startWeight.toLbs();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("Weight", style: Theme.of(context).textTheme.title),
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text("${lbs.value.toStringAsFixed(1)} ${lbs.unitsStr}"),
+                )
+              ],
+            )
+          )
+        ),
+        HorizontalScale(
+          maxValue: 400,
+          linesBetweenTwoPoints: 9,
+          middleLineAt: 5,
+          scaleColor: Theme.of(context).accentColor,
+          lineColor: Colors.white,
+          scaleController: _scaleController,
+          onChanged: (int scalePoints) {
+            setState(() {
+              int tenTimesLbs = scalePoints ~/ 20;
+              lbs = Lbs(tenTimesLbs.toDouble() / 10.0);
+              BlocProvider.of<ProfileBloc>(context).add(SetWeight(lbs));
+            });
+          }
+        ),
       ],
     );
   }

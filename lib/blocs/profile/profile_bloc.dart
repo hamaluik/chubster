@@ -18,6 +18,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if(event is LoadProfileFromRepository) {
       yield await ProfileState.initial(_profile);
     }
+    else if(event is SetBirthday) {
+      Debounce.milliseconds(500, () => _profile.setBirthday(event.newBirthday));
+      yield ProfileState.clone(state, birthday: event.newBirthday);
+    }
     else if(event is ChangeSex) {
       Debounce.milliseconds(500, () => _profile.setSex(event.newSex));
       yield ProfileState.clone(state, sex: event.newSex);
@@ -25,6 +29,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     else if(event is SetHeight) {
       Debounce.milliseconds(500, () => _profile.setHeight(event.newHeight));
       yield ProfileState.clone(state, height: event.newHeight);
+    }
+    else if(event is SetWeight) {
+      // TODO: figure out how to store weight without writing tons of things to
+      // the DB each time the user scrolls. Ideally we only get 1 weight per day.
+      //Debounce.milliseconds(500, () => _profile.setHeight(event.newHeight));
+      yield ProfileState.clone(state, weight: event.newWeight);
     }
   }
 }
