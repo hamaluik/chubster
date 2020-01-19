@@ -1,7 +1,7 @@
 import 'package:chubster/blocs/settings/settings_bloc.dart';
 import 'package:chubster/blocs/settings/settings_event.dart';
-import 'package:chubster/log_bloc_delegate.dart';
 import 'package:chubster/repositories/localdb_repository.dart';
+import 'package:chubster/repositories/profile_repository.dart';
 import 'package:chubster/repositories/settings_repository.dart';
 import 'package:chubster/screens/foods/foods_screen.dart';
 import 'package:chubster/screens/settings/settings_screen.dart';
@@ -12,10 +12,11 @@ import 'blocs/theme/bloc.dart';
 import 'screens/dashboard/dashboard_screen.dart';
 
 void main() async {
-  BlocSupervisor.delegate = LogBlocDelegate();
+  //BlocSupervisor.delegate = LogBlocDelegate();
   WidgetsFlutterBinding.ensureInitialized();
   final LocalDBRepository localDB = await LocalDBRepository.open();
   final SettingsRepository settings = await SettingsRepository.load();
+  final ProfileRepository profile = await ProfileRepository.open();
 
   runApp(MultiBlocProvider(
     providers: [
@@ -25,10 +26,13 @@ void main() async {
       BlocProvider<SettingsBloc>(
         create: (_) => SettingsBloc(settings),
       ),
+      BlocProvider<SettingsBloc>(
+        create: (_) => SettingsBloc(settings),
+      ),
     ],
     child: BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) =>
-          _ChubsterApp(localDB: localDB, settings: settings),
+          _ChubsterApp(localDB: localDB, settings: settings, profile: profile),
     ),
   ));
 }
@@ -37,9 +41,12 @@ void main() async {
 /// using `WidgetsBindingObserver`
 class _ChubsterApp extends StatefulWidget {
   final LocalDBRepository localDB;
+  final ProfileRepository profile;
   final SettingsRepository settings;
-  const _ChubsterApp({Key key, @required this.localDB, @required this.settings})
+  const _ChubsterApp({Key key, @required this.localDB, @required this.settings, this.profile})
       : assert(localDB != null),
+        assert(settings != null),
+        assert(profile != null),
         super(key: key);
 
   @override
