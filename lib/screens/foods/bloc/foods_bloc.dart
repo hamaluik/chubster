@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:chubster/repositories/foods_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chubster/models/food.dart';
-import 'package:chubster/repositories/localdb_repository.dart';
 import './bloc.dart';
 import 'bloc.dart';
 
 class FoodsBloc extends Bloc<FoodsEvent, FoodsState> {
-  final LocalDBRepository localDB;
-  FoodsBloc(this.localDB) : assert(localDB != null) {
+  final FoodsRepository foodsRepo;
+  FoodsBloc(this.foodsRepo) : assert(foodsRepo != null) {
     print('created foods bloc');
   }
 
@@ -24,7 +24,7 @@ class FoodsBloc extends Bloc<FoodsEvent, FoodsState> {
       print("searching...");
       yield SearchingFoodsState();
       try {
-        List<Food> foods = await localDB.searchForFoodByName(event.searchTerm);
+        List<Food> foods = await foodsRepo.searchForFoodByName(event.searchTerm);
         print('found ${foods.length} foods!');
         yield SearchResultsFoodsState(foods);
       }

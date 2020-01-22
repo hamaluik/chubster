@@ -1,15 +1,18 @@
 import 'package:equatable/equatable.dart';
 
+/// A representation of a food item
+///
+/// Note: all food nutrients are normalized to 100g! Use conversions to convert
+/// the values to other amounts
 class Food extends Equatable {
   final String name;
-  final double servingSize;
-  final String servingSizeUnits;
-  final double calories;
+
+  final double energy;
   final double fatTotal;
   final double fatSaturated;
+  final double fatTransaturated;
   final double fatPolyunsaturated;
   final double fatMonounsaturated;
-  final double fatTransaturated;
   final double cholesterol;
   final double sodium;
   final double carbohydrates;
@@ -20,15 +23,11 @@ class Food extends Equatable {
   final double potassium;
   final double alcohol;
   final double iron;
-  final double vitaminA;
-  final double vitaminC;
   final double caffeine;
 
   const Food({
     this.name,
-    this.servingSize,
-    this.servingSizeUnits,
-    this.calories,
+    this.energy,
     this.fatTotal,
     this.fatSaturated,
     this.fatPolyunsaturated,
@@ -44,16 +43,12 @@ class Food extends Equatable {
     this.potassium,
     this.alcohol,
     this.iron,
-    this.vitaminA,
-    this.vitaminC,
     this.caffeine,
   });
 
   Food.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        servingSize = json['serving_size'],
-        servingSizeUnits = json['serving_size_units'],
-        calories = json['calories'],
+        energy = json['energy'],
         fatTotal = json['fat_total'],
         fatSaturated = json['fat_saturated'],
         fatPolyunsaturated = json['fat_polyunsaturated'],
@@ -69,16 +64,12 @@ class Food extends Equatable {
         potassium = json['potassium'],
         alcohol = json['alcohol'],
         iron = json['iron'],
-        vitaminA = json['vitamin_a'],
-        vitaminC = json['vitamin_c'],
         caffeine = json['caffeine'];
 
   @override
   List<Object> get props => [
         name,
-        servingSize,
-        servingSizeUnits,
-        calories,
+        energy,
         fatTotal,
         fatSaturated,
         fatPolyunsaturated,
@@ -94,8 +85,6 @@ class Food extends Equatable {
         potassium,
         alcohol,
         iron,
-        vitaminA,
-        vitaminC,
         caffeine,
       ];
 }

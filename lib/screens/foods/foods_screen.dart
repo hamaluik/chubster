@@ -1,4 +1,4 @@
-import 'package:chubster/repositories/localdb_repository.dart';
+import 'package:chubster/repositories/foods_repository.dart';
 import 'package:chubster/screens/foods/food_details/food_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +10,12 @@ import 'bloc/bloc.dart';
 class FoodsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final LocalDBRepository localDB =
-        RepositoryProvider.of<LocalDBRepository>(context);
-    assert(localDB != null);
+    final FoodsRepository foods =
+        RepositoryProvider.of<FoodsRepository>(context);
+    assert(foods != null);
 
     return BlocProvider<FoodsBloc>(
-        create: (_) => FoodsBloc(localDB),
+        create: (_) => FoodsBloc(foods),
         child: Container(
             child: Column(
           children: <Widget>[
