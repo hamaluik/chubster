@@ -19,7 +19,7 @@ class LocalDBRepository {
     return rowid;
   }
 
-  static void _onConfigure(Database db) async {
+  static Future<void> _onConfigure(Database db) async {
     await db.execute("PRAGMA foreign_keys = ON");
   }
 

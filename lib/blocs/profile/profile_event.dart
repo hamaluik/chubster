@@ -31,9 +31,16 @@ class SetHeight extends ProfileEvent {
   @override List<Object> get props => [newHeight];
 }
 
+/// Update the in-memory weight, but don't persist it to disk. Emit `RecordWeight` _after_ SetWeight to save the weight
 class SetWeight extends ProfileEvent {
   final WeightUnits newWeight;
   SetWeight(this.newWeight);
 
   @override List<Object> get props => [newWeight];
+}
+
+
+/// Save the current weight to the database, effectively manually debouncing `SetWeight`
+class RecordWeight extends ProfileEvent {
+  @override List<Object> get props => [];
 }

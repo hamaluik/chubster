@@ -31,10 +31,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       yield ProfileState.clone(state, height: event.newHeight);
     }
     else if(event is SetWeight) {
-      // TODO: figure out how to store weight without writing tons of things to
-      // the DB each time the user scrolls. Ideally we only get 1 weight per day.
-      //Debounce.milliseconds(500, () => _profile.setHeight(event.newHeight));
       yield ProfileState.clone(state, weight: event.newWeight);
+    }
+    else if(event is RecordWeight) {
+      await _profile.recordWeight(state.weight);
+      yield state;
     }
   }
 }

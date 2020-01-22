@@ -129,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
                   trailing: Icon(FontAwesomeIcons.chevronRight),
                   leading: Icon(FontAwesomeIcons.weight),
                   onTap: () => showModalBottomSheet(
-                      context: context, builder: (context) => WeightSheet()),
+                      context: context, builder: (context) => WeightSheet()).then((_) => profileBloc.add(RecordWeight())),
                 )),
             Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),

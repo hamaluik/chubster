@@ -19,7 +19,7 @@ class ProfileRepository {
     return DateTime.fromMillisecondsSinceEpoch(ts);
   }
 
-  void setBirthday(DateTime birthday) async {
+  Future<void> setBirthday(DateTime birthday) async {
     int ts = birthday.millisecondsSinceEpoch;
     await _prefs.setInt("birthday", ts);
   }
@@ -30,7 +30,7 @@ class ProfileRepository {
     return Meters(height);
   }
 
-  void setHeight(LengthUnits height) async {
+  Future<void> setHeight(LengthUnits height) async {
     await _prefs.setDouble("height", height.toMeters().value);
   }
 
@@ -43,11 +43,11 @@ class ProfileRepository {
     return sex;
   }
 
-  void setSex(Sex sex) async {
+  Future<void> setSex(Sex sex) async {
     await _prefs.setString("sex", sex.toString());
   }
 
-  static void _onConfigure(Database db) async {
+  static Future<void> _onConfigure(Database db) async {
     await db.execute("PRAGMA foreign_keys = ON");
   }
 
@@ -60,7 +60,7 @@ class ProfileRepository {
     return null;
   }
 
-  void recordWeight(WeightUnits weight) async {
+  Future<void> recordWeight(WeightUnits weight) async {
     await _db.rawInsert("insert into weights(weight) values(?)", [weight.toKiloGrams().value]);
   }
 
