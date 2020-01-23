@@ -1,7 +1,7 @@
 import 'package:chubster/blocs/profile/bloc.dart';
 import 'package:chubster/blocs/settings/settings_bloc.dart';
 import 'package:chubster/blocs/settings/settings_event.dart';
-import 'package:chubster/repositories/localdb_repository.dart';
+import 'package:chubster/repositories/foods_repository.dart';
 import 'package:chubster/repositories/profile_repository.dart';
 import 'package:chubster/repositories/settings_repository.dart';
 import 'package:chubster/screens/foods/foods_screen.dart';
@@ -15,11 +15,11 @@ import 'screens/dashboard/dashboard_screen.dart';
 void main() async {
   //BlocSupervisor.delegate = LogBlocDelegate();
   WidgetsFlutterBinding.ensureInitialized();
-  final LocalDBRepository localDB = await LocalDBRepository.open();
+  final FoodsRepository foods = await FoodsRepository.open();
   final SettingsRepository settings = await SettingsRepository.load();
   final ProfileRepository profile = await ProfileRepository.open();
 
-  assert(localDB != null);
+  assert(foods != null);
   assert(settings != null);
   assert(profile != null);
 
@@ -37,7 +37,7 @@ void main() async {
     ],
     child: BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) =>
-          _ChubsterApp(localDB: localDB, settings: settings, profile: profile),
+          _ChubsterApp(foods: foods, settings: settings, profile: profile),
     ),
   ));
 }
@@ -45,11 +45,11 @@ void main() async {
 /// Chubster app is stateful so it can listen to platform brightness changes
 /// using `WidgetsBindingObserver`
 class _ChubsterApp extends StatefulWidget {
-  final LocalDBRepository localDB;
+  final FoodsRepository foods;
   final ProfileRepository profile;
   final SettingsRepository settings;
-  const _ChubsterApp({Key key, @required this.localDB, @required this.settings, this.profile})
-      : assert(localDB != null),
+  const _ChubsterApp({Key key, @required this.foods, @required this.settings, this.profile})
+      : assert(foods != null),
         assert(settings != null),
         assert(profile != null),
         super(key: key);
@@ -110,7 +110,7 @@ class _ChubsterAppState extends State<_ChubsterApp>
 
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<LocalDBRepository>.value(value: widget.localDB),
+        RepositoryProvider<FoodsRepository>.value(value: widget.foods),
         RepositoryProvider<SettingsRepository>.value(value: widget.settings),
         RepositoryProvider<ProfileRepository>.value(value: widget.profile),
       ],

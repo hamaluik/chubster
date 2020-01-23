@@ -21,8 +21,7 @@ class FoodDetailsScreen extends StatelessWidget {
               fontWeight: FontWeight.w700,
               fontSize: Theme.of(context).textTheme.display1.fontSize,
             )),
-            Text("Serving Size ${food.servingSize} ${food.servingSizeUnits ?? ''}"),
-            Text("Calories ${food.calories ?? '?'}", style: TextStyle(fontWeight: FontWeight.w700)),
+            Text("Energy ${food.energy ?? '?'}", style: TextStyle(fontWeight: FontWeight.w700)),
             Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -163,21 +162,6 @@ class FoodDetailsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text("Alcohol ${food.alcohol ?? '?'} mg", style: TextStyle()),
-              ],
-            ),
-            Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Vitamin A ${food.vitaminA ?? '?'} mg", style: TextStyle()),
-                Text("? %"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Vitamin C ${food.vitaminC ?? '?'} mg", style: TextStyle()),
-                Text("? %"),
               ],
             ),
             Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
