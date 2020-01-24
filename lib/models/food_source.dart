@@ -1,0 +1,1 @@
+enum FoodSource { local, cnf }

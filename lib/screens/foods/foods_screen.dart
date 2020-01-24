@@ -15,17 +15,16 @@ class FoodsScreen extends StatelessWidget {
     assert(foods != null);
 
     return BlocProvider<FoodsBloc>(
-        create: (_) => FoodsBloc(foods),
+      create: (_) => FoodsBloc(foods),
         child: Container(
-            child: Column(
+          child: Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: _SearchBar(),
-            ),
             _SearchResults(),
+            _SearchBar(),
           ],
-        )));
+        )
+      )
+    );
   }
 }
 
@@ -52,14 +51,35 @@ class _SearchBarState extends State<_SearchBar> {
   @override
   Widget build(BuildContext context) {
     final FoodsBloc foodsBloc = BlocProvider.of<FoodsBloc>(context);
+    String label;
+    if(foodsBloc.state is EmptyFoodsState) {
+      label = "Search for foods by name";
+    }
+    String error;
+    if(foodsBloc.state is SearchingFoodsError) {
+      error = "Error searching databases!";
+    }
 
-    return TextField(
-      decoration: InputDecoration(icon: Icon(FontAwesomeIcons.search)),
-      controller: _textController,
-      onChanged: (searchTerm) =>
-          Debounce.milliseconds(100, _updateSearch, [foodsBloc, searchTerm]),
-      onSubmitted: (searchTerm) =>
-          Debounce.runAndClear(_updateSearch, [foodsBloc, searchTerm]),
+    return Container(
+      color: Theme.of(context).dialogBackgroundColor,
+      child: 
+        Padding(
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: TextField(
+            autofocus: true,
+            autocorrect: true,
+            decoration: InputDecoration(
+              icon: Icon(FontAwesomeIcons.search),
+              hintText: label,
+              errorText: error,
+            ),
+            controller: _textController,
+            onChanged: (searchTerm) =>
+                Debounce.milliseconds(100, _updateSearch, [foodsBloc, searchTerm]),
+            onSubmitted: (searchTerm) =>
+                Debounce.runAndClear(_updateSearch, [foodsBloc, searchTerm]),
+          ),
+        ),
     );
   }
 }
@@ -71,9 +91,7 @@ class _SearchResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FoodsBloc, FoodsState>(
       builder: (context, state) {
-        if (state is EmptyFoodsState) {
-          return Center(child: Text("Search for foods by name"));
-        } else if (state is SearchingFoodsState) {
+        if (state is SearchingFoodsState) {
           return Center(
               child: SizedBox(
                   width: 30.0,
@@ -89,19 +107,17 @@ class _SearchResults extends StatelessWidget {
                 return ListTile(
                   title: Text(food.name),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => FoodDetailsScreen(food: food,),
+                    builder: (context) => FoodDetailsScreen(
+                      food: food,
+                    ),
                   )),
                 );
               }).toList(),
             ),
           );
-        } else if (state is SearchingFoodsError) {
-          return Center(
-              child: Text("Error!",
-                  style: TextStyle(color: Theme.of(context).errorColor)));
         } else {
-          return SizedBox(
-            child: Text(state.toString()),
+          return Expanded(
+            child: Container()
           );
         }
       },

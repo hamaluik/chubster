@@ -21,18 +21,23 @@ class FoodsBloc extends Bloc<FoodsEvent, FoodsState> {
   ) async* {
     print("FoodsEvent received: " + event.toString());
     if(event is SearchTermChangedEvent) {
-      print("searching...");
-      yield SearchingFoodsState();
-      try {
-        List<Food> foods = await foodsRepo.searchForFoodByName(event.searchTerm);
-        print('found ${foods.length} foods!');
-        yield SearchResultsFoodsState(foods);
+      if(event.searchTerm == null || event.searchTerm.trim().length < 1) {
+        yield SearchResultsFoodsState([]);
       }
-      catch(_) {
-        print('error!');
-        yield SearchingFoodsError();
+      else {
+        print("searching...");
+        yield SearchingFoodsState();
+        try {
+          List<Food> foods = await foodsRepo.searchForFoodByName(event.searchTerm);
+          print('found ${foods.length} foods!');
+          yield SearchResultsFoodsState(foods);
+        }
+        catch(_) {
+          print('error!');
+          yield SearchingFoodsError();
+        }
+        print('done _loadEvent');
       }
-      print('done _loadEvent');
     }
   }
 }

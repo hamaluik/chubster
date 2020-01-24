@@ -1,3 +1,4 @@
+import 'package:chubster/models/food_source.dart';
 import 'package:equatable/equatable.dart';
 
 /// A representation of a food item
@@ -6,6 +7,7 @@ import 'package:equatable/equatable.dart';
 /// the values to other amounts
 class Food extends Equatable {
   final String name;
+  final FoodSource source;
 
   final double energy;
   final double fatTotal;
@@ -27,6 +29,7 @@ class Food extends Equatable {
 
   const Food({
     this.name,
+    this.source,
     this.energy,
     this.fatTotal,
     this.fatSaturated,
@@ -46,8 +49,9 @@ class Food extends Equatable {
     this.caffeine,
   });
 
-  Food.fromJson(Map<String, dynamic> json)
+  Food.fromJson(Map<String, dynamic> json, FoodSource source)
       : name = json['name'],
+        source = source,
         energy = json['energy'],
         fatTotal = json['fat_total'],
         fatSaturated = json['fat_saturated'],
