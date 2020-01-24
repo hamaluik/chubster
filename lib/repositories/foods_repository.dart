@@ -1,6 +1,7 @@
 import 'package:chubster/data_providers/cnf_foods_provider.dart';
 import 'package:chubster/data_providers/local_foods_provider.dart';
 import 'package:chubster/models/food.dart';
+import 'package:flutter/foundation.dart';
 
 class FoodsRepository {
   final LocalFoodsProvider _local;
@@ -10,11 +11,13 @@ class FoodsRepository {
     : assert(_local != null),
       assert(_cnf != null);
 
-  Future<List<Food>> searchForFoodByName(String name) async {
-    List<List<Food>> databaseFoods = await Future.wait([
-      _local.searchForFoodByName(name),
-      _cnf.searchForFoodByName(name)
-    ]);
+  Future<List<Food>> searchForFoodByName(String name, {@required bool localActive, @required bool cnfActive}) async {
+    List<Future<List<Food>>> searches = [];
+    if(localActive) searches.add(_local.searchForFoodByName(name));
+    if(cnfActive) searches.add(_cnf.searchForFoodByName(name));
+
+    List<List<Food>> databaseFoods = await Future.wait(searches);
+
     // https://stackoverflow.com/questions/15413248/how-to-flatten-a-list
     return databaseFoods.expand((i) => i).toList();
   }

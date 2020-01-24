@@ -28,7 +28,7 @@ class FoodsBloc extends Bloc<FoodsEvent, FoodsState> {
         print("searching...");
         yield SearchingFoodsState();
         try {
-          List<Food> foods = await foodsRepo.searchForFoodByName(event.searchTerm);
+          List<Food> foods = await foodsRepo.searchForFoodByName(event.searchTerm, localActive: event.localActive, cnfActive: event.cnfActive);
           print('found ${foods.length} foods!');
           yield SearchResultsFoodsState(foods);
         }

@@ -1,4 +1,6 @@
+import 'package:chubster/blocs/settings/settings_bloc.dart';
 import 'package:chubster/repositories/foods_repository.dart';
+import 'package:chubster/repositories/settings_repository.dart';
 import 'package:chubster/screens/foods/food_details/food_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +15,9 @@ class FoodsScreen extends StatelessWidget {
     final FoodsRepository foods =
         RepositoryProvider.of<FoodsRepository>(context);
     assert(foods != null);
+    final SettingsRepository settings =
+        RepositoryProvider.of<SettingsRepository>(context);
+    assert(settings != null);
 
     return BlocProvider<FoodsBloc>(
       create: (_) => FoodsBloc(foods),
@@ -44,13 +49,16 @@ class _SearchBarState extends State<_SearchBar> {
     _textController = TextEditingController(text: "");
   }
 
-  void _updateSearch(FoodsBloc bloc, String searchTerm) {
-    bloc.add(SearchTermChangedEvent(searchTerm));
+  void _updateSearch(FoodsBloc foodsBloc, SettingsBloc settingsBloc, String searchTerm) {
+    foodsBloc.add(SearchTermChangedEvent(searchTerm, settingsBloc.state.localActive, settingsBloc.state.cnfActive));
   }
 
   @override
   Widget build(BuildContext context) {
     final FoodsBloc foodsBloc = BlocProvider.of<FoodsBloc>(context);
+    assert(foodsBloc != null);
+    final SettingsBloc settingsBloc = BlocProvider.of<SettingsBloc>(context);
+    assert(settingsBloc != null);
     String label;
     if(foodsBloc.state is EmptyFoodsState) {
       label = "Search for foods by name";
@@ -75,9 +83,9 @@ class _SearchBarState extends State<_SearchBar> {
             ),
             controller: _textController,
             onChanged: (searchTerm) =>
-                Debounce.milliseconds(100, _updateSearch, [foodsBloc, searchTerm]),
+                Debounce.milliseconds(100, _updateSearch, [foodsBloc, settingsBloc, searchTerm]),
             onSubmitted: (searchTerm) =>
-                Debounce.runAndClear(_updateSearch, [foodsBloc, searchTerm]),
+                Debounce.runAndClear(_updateSearch, [foodsBloc, settingsBloc, searchTerm]),
           ),
         ),
     );
