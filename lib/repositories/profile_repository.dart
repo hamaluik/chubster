@@ -1,4 +1,5 @@
 import 'package:chubster/data_providers/profile_provider.dart';
+import 'package:chubster/models/activity_level.dart';
 import 'package:chubster/models/measurement.dart';
 import 'package:chubster/models/sex.dart';
 import 'package:chubster/models/units.dart';
@@ -47,6 +48,19 @@ class ProfileRepository {
 
   Future<void> setSex(Sex sex) async {
     await _prefs.setString("sex", sex.toString());
+  }
+
+  ActivityLevel getActivityLevel() {
+    String activityStr = _prefs.getString("activityLevel");
+    ActivityLevel activityLevel = ActivityLevel.sedentary;
+    if(activityStr != null) {
+      activityLevel = ActivityLevel.values.firstWhere((e) => e.toString() == activityStr);
+    }
+    return activityLevel;
+  }
+
+  Future<void> setActivityLevel(ActivityLevel activityLevel) async {
+    await _prefs.setString("activityLevel", activityLevel.toString());
   }
 
   Future<WeightUnits> getCurrentWeight() async {

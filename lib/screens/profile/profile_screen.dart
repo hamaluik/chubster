@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:chubster/models/activity_level.dart';
 import 'package:chubster/blocs/profile/bloc.dart';
 import 'package:chubster/blocs/settings/bloc.dart';
 import 'package:chubster/models/food_source.dart';
@@ -147,6 +146,71 @@ class ProfileScreen extends StatelessWidget {
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                     child: ListTile(
+                      title: Text("Activity Level"),
+                      subtitle: Text('${profile.activityLevel.stringify} (${profile.activityLevel.description})'),
+                      trailing: Icon(FontAwesomeIcons.chevronRight, color: Theme.of(context).accentColor),
+                      leading: Icon(FontAwesomeIcons.dumbbell),
+                      onTap: () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  RadioListTile<ActivityLevel>(
+                                    title: Text(ActivityLevel.sedentary.stringify),
+                                    subtitle: Text(ActivityLevel.sedentary.description),
+                                    value: ActivityLevel.sedentary,
+                                    groupValue: profile.activityLevel,
+                                    onChanged: (ActivityLevel value) {
+                                      profileBloc.add(ChangeActivityLevel(ActivityLevel.sedentary));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile<ActivityLevel>(
+                                    title: Text(ActivityLevel.light.stringify),
+                                    subtitle: Text(ActivityLevel.light.description),
+                                    value: ActivityLevel.light,
+                                    groupValue: profile.activityLevel,
+                                    onChanged: (ActivityLevel value) {
+                                      profileBloc.add(ChangeActivityLevel(ActivityLevel.light));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile<ActivityLevel>(
+                                    title: Text(ActivityLevel.moderate.stringify),
+                                    subtitle: Text(ActivityLevel.moderate.description),
+                                    value: ActivityLevel.moderate,
+                                    groupValue: profile.activityLevel,
+                                    onChanged: (ActivityLevel value) {
+                                      profileBloc.add(ChangeActivityLevel(ActivityLevel.moderate));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile<ActivityLevel>(
+                                    title: Text(ActivityLevel.very.stringify),
+                                    subtitle: Text(ActivityLevel.very.description),
+                                    value: ActivityLevel.very,
+                                    groupValue: profile.activityLevel,
+                                    onChanged: (ActivityLevel value) {
+                                      profileBloc.add(ChangeActivityLevel(ActivityLevel.very));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile<ActivityLevel>(
+                                    title: Text(ActivityLevel.extra.stringify),
+                                    subtitle: Text(ActivityLevel.extra.description),
+                                    value: ActivityLevel.extra,
+                                    groupValue: profile.activityLevel,
+                                    onChanged: (ActivityLevel value) {
+                                      profileBloc.add(ChangeActivityLevel(ActivityLevel.extra));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              )),
+                    )),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                    child: ListTile(
                       title: Text("BMI"),
                       subtitle: profile.bmi != null
                           ? Text(profile.bmi.toStringAsFixed(1))
@@ -161,6 +225,24 @@ class ProfileScreen extends StatelessWidget {
                           ? Text("Estimated " + profile.bodyFatPercent.toStringAsFixed(0) + "%")
                           : Text("—"),
                       leading: Icon(FontAwesomeIcons.percentage),
+                    )),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                    child: ListTile(
+                      title: Text("Resting Energy / Day"),
+                      subtitle: profile.restingDailyEnergy != null
+                          ? Text("Estimated " + profile.restingDailyEnergy.toStringAsFixed(0) + " kCal")
+                          : Text("—"),
+                      leading: Icon(FontAwesomeIcons.bed),
+                    )),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                    child: ListTile(
+                      title: Text("Total Energy / Day"),
+                      subtitle: profile.totalDailyEnergy != null
+                          ? Text("Estimated " + profile.totalDailyEnergy.toStringAsFixed(0) + " kCal")
+                          : Text("—"),
+                      leading: Icon(FontAwesomeIcons.fire),
                     )),
                 ],
               )

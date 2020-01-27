@@ -1,3 +1,4 @@
+import 'package:chubster/models/activity_level.dart';
 import 'package:chubster/models/sex.dart';
 import 'package:chubster/models/units.dart';
 import 'package:equatable/equatable.dart';
@@ -24,6 +25,13 @@ class ChangeSex extends ProfileEvent {
   @override List<Object> get props => [newSex];
 }
 
+class ChangeActivityLevel extends ProfileEvent {
+  final ActivityLevel newLevel;
+  ChangeActivityLevel(this.newLevel);
+
+  @override List<Object> get props => [newLevel];
+}
+
 class SetHeight extends ProfileEvent {
   final LengthUnits newHeight;
   SetHeight(this.newHeight);
@@ -38,7 +46,6 @@ class SetWeight extends ProfileEvent {
 
   @override List<Object> get props => [newWeight];
 }
-
 
 /// Save the current weight to the database, effectively manually debouncing `SetWeight`
 class RecordWeight extends ProfileEvent {

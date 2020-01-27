@@ -26,6 +26,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       Debounce.milliseconds(500, () => _profile.setSex(event.newSex));
       yield ProfileState.clone(state, sex: event.newSex);
     }
+    else if(event is ChangeActivityLevel) {
+      Debounce.milliseconds(500, () => _profile.setActivityLevel(event.newLevel));
+      yield ProfileState.clone(state, activityLevel: event.newLevel);
+    }
     else if(event is SetHeight) {
       Debounce.milliseconds(500, () => _profile.setHeight(event.newHeight));
       yield ProfileState.clone(state, height: event.newHeight);

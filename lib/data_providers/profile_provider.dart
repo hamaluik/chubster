@@ -47,8 +47,9 @@ class ProfileProvider {
     List<Map<String, dynamic>> rows = await _db.rawQuery("select value, strftime('%s',timestamp) as timestamp from weights order by timestamp desc limit 1");
     if(rows == null || rows.length == 0) return null;
     double value = rows[0]['value'];
-    int ts = rows[0]['timestamp'];
-    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+    String ts = rows[0]['timestamp'];
+    int time = int.parse(ts);
+    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(time * 1000, isUtc: true);
     return WeightMeasurement(
       weight: KiloGrams(value),
       timestamp: timestamp,
