@@ -1,15 +1,17 @@
-import 'dart:io';
+import 'package:chubster/data_providers/profile_provider.dart';
+import 'package:chubster/models/measurement.dart';
 import 'package:chubster/models/sex.dart';
 import 'package:chubster/models/units.dart';
+import 'package:chubster/models/weight_measurement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as p;
 
 class ProfileRepository {
-  final Database _db;
+  final ProfileProvider _profile;
   final SharedPreferences _prefs;
 
-  ProfileRepository(this._db, this._prefs);
+  ProfileRepository(this._profile, this._prefs)
+    : assert(_profile != null)
+    , assert(_prefs != null);
 
   DateTime getBirthday() {
     int ts = _prefs.getInt("birthday");
@@ -47,43 +49,18 @@ class ProfileRepository {
     await _prefs.setString("sex", sex.toString());
   }
 
-  static Future<void> _onConfigure(Database db) async {
-    await db.execute("PRAGMA foreign_keys = ON");
-  }
-
-  Future<KiloGrams> getCurrentWeight() async {
-    var results = await _db.rawQuery("select weight from weights order by timestamp desc limit 1");
-    if(results.length > 0) {
-      double weight = results[0]["weight"];
-      return KiloGrams(weight);
-    }
-    return null;
+  Future<WeightUnits> getCurrentWeight() async {
+    WeightMeasurement measurement = await _profile.getLatestWeight();
+    return measurement?.weight;
   }
 
   Future<void> recordWeight(WeightUnits weight) async {
-    await _db.rawInsert("insert into weights(weight) values(?)", [weight.toKiloGrams().value]);
-  }
-
-  static void _onCreate(Database db, int version) async {
-    await db.execute('''
-      create table weights(
-        weight real not null,
-        timestamp integer not null default current_timestamp
-      )
-    ''');
+    await _profile.recordWeight(weight);
   }
 
   static Future<ProfileRepository> open() async {
-    // get a path to the database file
-    var databasesPath = await getDatabasesPath();
-    var path = p.join(databasesPath, 'chubster.profile.db');
-    await Directory(databasesPath).create(recursive: true);
-
-    // open the database
-    Database db = await openDatabase(path,
-        onConfigure: _onConfigure, onCreate: _onCreate, version: 1);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    ProfileRepository repo = ProfileRepository(db, prefs);
+    List<dynamic> futures = await Future.wait([ProfileProvider.open(), SharedPreferences.getInstance()]);
+    ProfileRepository repo = ProfileRepository(futures[0], futures[1]);
 
     return repo;
   }

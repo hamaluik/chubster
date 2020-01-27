@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:chubster/models/food_conversion.dart';
 import 'package:chubster/models/food_source.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
@@ -19,6 +20,13 @@ class CNFFoodsProvider extends FoodsProvider {
     List<Food> foods =
         results.map((food) => Food.fromJson(food, FoodSource.cnf)).toList();
     return foods;
+  }
+
+  @override
+  Future<List<FoodConversion>> getConversionsForFood(int sourceID) async {
+    List<Map> results = await _db.rawQuery("select description, conversion_factor from conversions inner join measurements on measurements.id=conversions.measurement_id where food_id=?", [sourceID]);
+    List<FoodConversion> conversions = results.map((row) => FoodConversion(row['description'], row['conversion_factor'])).toList();
+    return conversions;
   }
 
   static Future<CNFFoodsProvider> open() async {

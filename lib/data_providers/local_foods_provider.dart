@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:chubster/models/food_conversion.dart';
 import 'package:path/path.dart' as p;
 import 'package:chubster/data_providers/foods_provider.dart';
 import 'package:chubster/models/food.dart';
@@ -19,23 +20,23 @@ class LocalFoodsProvider extends FoodsProvider {
       create table foods(
         id integer not null primary key autoincrement,
         name text not null,
-        energy real default null,
-        fat_total real default null,
-        fat_saturated real default null,
-        fat_trans real default null,
-        fat_polyunsaturated real default null,
-        fat_monounsaturated real default null,
-        cholesterol real default null,
-        sodium real default null,
-        carbohydrates real default null,
-        fiber real default null,
-        sugars real default null,
-        protein real default null,
-        calcium real default null,
-        potassium real default null,
-        iron real default null,
-        alcohol real default null,
-        caffeine real default null
+        energy real default null, -- kCal / 100g
+        fat_total real default null, -- g / 100g
+        fat_saturated real default null, -- g / 100g
+        fat_transaturated real default null, -- g / 100g
+        fat_polyunsaturated real default null, -- g / 100g
+        fat_monounsaturated real default null, -- g / 100g
+        cholesterol real default null, -- mg / 100g
+        sodium real default null, -- mg / 100g
+        carbohydrates real default null, -- g / 100g
+        fiber real default null, -- g / 100g
+        sugars real default null, -- g / 100g
+        protein real default null, -- g / 100g
+        calcium real default null, -- mg / 100g
+        potassium real default null, -- mg / 100g
+        iron real default null, -- mg / 100g
+        alcohol real default null, -- g / 100g
+        caffeine real default null -- mg / 100g
       )
     ''');
     await db.execute('''
@@ -88,5 +89,11 @@ class LocalFoodsProvider extends FoodsProvider {
   Future<int> createFood(Food food) async {
     // TODO: implement createFood
     throw Exception("createFood is not implemented yet!");
+  }
+
+  @override
+  Future<List<FoodConversion>> getConversionsForFood(int sourceID) async {
+    // TODO: local conversions
+    return List<FoodConversion>();
   }
 }
