@@ -42,11 +42,14 @@ class CNFFoodsProvider extends FoodsProvider {
       await Directory(p.dirname(path)).create(recursive: true);
         
       // copy the database from the asset
+      print("Loading cnf.db");
       ByteData data = await rootBundle.load(p.join("assets", "cnf.db"));
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       
       // write and flush the bytes written
+      print("Copying cnf.db to disk");
       await File(path).writeAsBytes(bytes, flush: true);
+      print("Done installing cnf.db!");
     }
 
     // open the database
