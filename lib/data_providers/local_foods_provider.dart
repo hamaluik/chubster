@@ -74,6 +74,14 @@ class LocalFoodsProvider extends FoodsProvider {
         onConfigure: _onConfigure, onCreate: _onCreate, version: 1);
     LocalFoodsProvider repo = LocalFoodsProvider(db);
 
+    print("Compile options:");
+    List<Map> compileOptions = await db.rawQuery("pragma compile_options");
+    print(compileOptions.toString());
+    for(Map<String, dynamic> compileOption in compileOptions) {
+      print(compileOption['compile_options']);
+    }
+    print("</ compile options");
+
     return repo;
   }
 
