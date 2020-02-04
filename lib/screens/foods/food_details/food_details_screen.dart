@@ -26,156 +26,339 @@ class FoodDetailsScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
-            Text("Nutrition Facts", style: TextStyle(
-              color: Theme.of(context).textTheme.body1.color,
-              fontWeight: FontWeight.w700,
-              fontSize: Theme.of(context).textTheme.display1.fontSize,
-            )),
-            Text("Energy: ${food.energy ?? '?'} kCal", style: TextStyle(fontWeight: FontWeight.w700)),
-            Text("Nutritional content / 100 g"),
-            Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
+            Text(food.name, style: Theme.of(context).textTheme.title),
+            Text("Energy: ${food.energy ?? '?'} kCal", style: Theme.of(context).textTheme.subtitle),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text("% Daily", style: Theme.of(context).textTheme.caption)
-              ],
-            ),
-            Divider(thickness: 1.0, color: Theme.of(context).textTheme.body1.color),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Total Fat: ${food.fatTotal ?? '?'} g", style: TextStyle(fontWeight: FontWeight.w700)),
-                Text(renderDailyValue(food.fatTotal, multiplier, 65), style: TextStyle(fontWeight: FontWeight.w700)),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Monounsaturated: ${food.fatMonounsaturated ?? '?'} g", style: TextStyle()),
-                  Text(renderDailyValue(food.fatMonounsaturated, multiplier, null)),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Polyunsaturated: ${food.fatPolyunsaturated ?? '?'} g", style: TextStyle()),
-                  Text(renderDailyValue(food.fatPolyunsaturated, multiplier, null)),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Saturated: ${food.fatSaturated ?? '?'} g", style: TextStyle()),
-                  Text(renderDailyValue(food.fatSaturated, multiplier, 20)),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Transaturated: ${food.fatTransaturated ?? '?'} g", style: TextStyle()),
-                  Text(renderDailyValue(food.fatTransaturated, multiplier, 0)),
-                ],
-              ),
-            ),
-            Divider(thickness: 1.0, color: Theme.of(context).textTheme.body1.color),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Carbohydrate: ${food.carbohydrates ?? '?'} g", style: TextStyle(fontWeight: FontWeight.w700)),
-                Text(renderDailyValue(food.carbohydrates, multiplier, 300), style: TextStyle(fontWeight: FontWeight.w700)),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Fibre: ${food.fiber ?? '?'} g", style: TextStyle()),
-                  Text(renderDailyValue(food.fiber, multiplier, 25)),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Sugars: ${food.sugars ?? '?'} g", style: TextStyle()),
-                  Text(renderDailyValue(food.sugars, multiplier, null)),
-                ],
-              ),
-            ),
-            Divider(thickness: 1.0, color: Theme.of(context).textTheme.body1.color),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Protein: ${food.protein ?? '?'} g", style: TextStyle(fontWeight: FontWeight.w700)),
-                Text(renderDailyValue(food.protein, multiplier, null), style: TextStyle(fontWeight: FontWeight.w700)),
-              ],
-            ),
-            Divider(thickness: 1.0, color: Theme.of(context).textTheme.body1.color),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Cholesterol: ${food.cholesterol ?? '?'} mg", style: TextStyle()),
-                Text(renderDailyValue(food.cholesterol, multiplier, 300)),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Sodium: ${food.sodium ?? '?'} mg", style: TextStyle()),
-                Text(renderDailyValue(food.sodium, multiplier, 2400)),
+                Expanded(flex: 3, child: Container()),
+                Expanded(
+                  flex: 1,
+                  child: Text("/ 100 g", textAlign: TextAlign.right,)
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("% Daily", textAlign: TextAlign.right,),
+                )
               ],
             ),
             Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Potassium: ${food.potassium ?? '?'} mg", style: TextStyle()),
-                Text(renderDailyValue(food.potassium, multiplier, null)),
+                Expanded(
+                  flex: 3,
+                  child: Text("Total Fat", style: TextStyle(fontWeight: FontWeight.w700)),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.fatTotal ?? '?'} g", style: TextStyle(fontWeight: FontWeight.w700), textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.fatTotal, multiplier, 65), style: TextStyle(fontWeight: FontWeight.w700), textAlign: TextAlign.right,),
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Calcium: ${food.calcium ?? '?'} mg", style: TextStyle()),
-                Text(renderDailyValue(food.calcium, multiplier, 1100)),
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Monounsaturated"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.fatMonounsaturated?.toStringAsFixed(1) ?? '?'} g", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.fatMonounsaturated, multiplier, null), textAlign: TextAlign.right,),
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Iron: ${food.iron ?? '?'} mg", style: TextStyle()),
-                Text(renderDailyValue(food.iron, multiplier, 14)),
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Polyunsaturated"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.fatPolyunsaturated?.toStringAsFixed(1) ?? '?'} g", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.fatPolyunsaturated, multiplier, null), textAlign: TextAlign.right,),
+                ),
               ],
             ),
-            Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Caffeine: ${food.caffeine ?? '?'} mg", style: TextStyle()),
-                Text(renderDailyValue(food.caffeine, multiplier, null)),
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Saturated"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.fatSaturated?.toStringAsFixed(1) ?? '?'} g", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.fatSaturated, multiplier, null), textAlign: TextAlign.right,),
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Alcohol: ${food.alcohol ?? '?'} mg", style: TextStyle()),
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Transaturated"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.fatTransaturated?.toStringAsFixed(1) ?? '?'} g", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.fatTransaturated, multiplier, null), textAlign: TextAlign.right,),
+                ),
               ],
             ),
-            Divider(thickness: 4.0, color: Theme.of(context).textTheme.body1.color),
+            Divider(thickness: 1.0, color: Theme.of(context).textTheme.body1.color),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Text("Carbohydrate", style: TextStyle(fontWeight: FontWeight.w700)),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.carbohydrates ?? '?'} g", style: TextStyle(fontWeight: FontWeight.w700), textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.carbohydrates, multiplier, 65), style: TextStyle(fontWeight: FontWeight.w700), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Fibre"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.fiber?.toStringAsFixed(1) ?? '?'} g", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.fiber, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Sugars"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.sugars?.toStringAsFixed(1) ?? '?'} g", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.sugars, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Divider(thickness: 1.0, color: Theme.of(context).textTheme.body1.color),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Text("Protein", style: TextStyle(fontWeight: FontWeight.w700)),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.protein ?? '?'} g", style: TextStyle(fontWeight: FontWeight.w700), textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.protein, multiplier, 65), style: TextStyle(fontWeight: FontWeight.w700), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Divider(thickness: 2.0, color: Theme.of(context).textTheme.body1.color),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Cholesterol"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.cholesterol?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.cholesterol, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Sodium"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.sodium?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.sodium, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Potassium"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.potassium?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.potassium, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Calcium"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.calcium?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.calcium, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Iron"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.iron?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.iron, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Divider(thickness: 2.0, color: Theme.of(context).textTheme.body1.color),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Caffeine"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.caffeine?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.caffeine, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text("Alcohol"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text("${food.alcohol?.toStringAsFixed(1) ?? '?'} mg", textAlign: TextAlign.right,),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(renderDailyValue(food.alcohol, multiplier, null), textAlign: TextAlign.right,),
+                ),
+              ],
+            ),
+            Divider(thickness: 2.0, color: Theme.of(context).textTheme.body1.color),
           ],
         )
       )
